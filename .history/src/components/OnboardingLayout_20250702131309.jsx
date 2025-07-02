@@ -49,7 +49,7 @@ const stepSVGs = [
   ),
 ];
 
-const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
+const OnboardingLayout = ({ children, stepStatus: propStepStatus, setCurrentView }) => {
   // Get state from context, with fallback to props
   let stepStatus = [false, false, false, false, false];
   let activeStepIndex = 0;
@@ -72,6 +72,18 @@ const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
     console.warn("SidebarContext not available in OnboardingLayout:", error.message);
   }
 
+  // Map step index to view name
+  const stepToView = [
+    'home',           // Basic Details
+    'subservice',     // Additional Services
+    'shareDetails',   // Share Your Details
+    'proposal',       // Preview
+    'proposal',       // Proposal
+  ];
+  const handleStepClick = (idx) => {
+    if (setCurrentView) setCurrentView(stepToView[idx]);
+  };
+
   return (
     <div className='w-full min-h-screen bg-transparent flex flex-col md:flex-row justify-center items-stretch p-0 relative overflow-x-hidden'>
       {/* Left banner */}
@@ -80,6 +92,7 @@ const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
         stepSVGs={stepSVGs}
         stepStatus={stepStatus}
         activeStepIndex={activeStepIndex}
+        onStepClick={setCurrentView ? handleStepClick : undefined}
       />
       {/* Main content */}
       <div className='flex flex-col items-start justify-center min-h-screen w-full z-10 px-2 md:pl-[100px] md:px-0'

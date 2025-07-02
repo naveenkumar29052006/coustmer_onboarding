@@ -49,7 +49,7 @@ const stepSVGs = [
   ),
 ];
 
-const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
+const OnboardingLayout = ({ children, stepStatus: propStepStatus, setCurrentView }) => {
   // Get state from context, with fallback to props
   let stepStatus = [false, false, false, false, false];
   let activeStepIndex = 0;
@@ -80,6 +80,7 @@ const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
         stepSVGs={stepSVGs}
         stepStatus={stepStatus}
         activeStepIndex={activeStepIndex}
+        setCurrentView={setCurrentView}
       />
       {/* Main content */}
       <div className='flex flex-col items-start justify-center min-h-screen w-full z-10 px-2 md:pl-[100px] md:px-0'

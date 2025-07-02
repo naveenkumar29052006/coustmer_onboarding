@@ -8,7 +8,7 @@ const valuationRanges = [
     "10-50 Crore",
     "50-100 Crore",
     "Above 100 Crore",
-    "All of the above",
+    "Above all of this",
 ];
 
 const currencies = [
@@ -29,8 +29,8 @@ const FinancialOverviewStep = ({ onAboveAllOfThis }) => {
         if (range === "Yet to begin") {
             updateField("employeeCount", "0-10");
         }
-        // If 'All of the above' is selected, trigger special navigation
-        if (range === "All of the above" && typeof onAboveAllOfThis === 'function') {
+        // If 'Above all of this' is selected, trigger special navigation
+        if (range === "Above all of this" && typeof onAboveAllOfThis === 'function') {
             onAboveAllOfThis();
         }
     };

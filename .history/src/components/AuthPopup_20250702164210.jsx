@@ -78,26 +78,26 @@ const AuthPopup = ({ onClose, onRegister }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{overflow: 'hidden', position: 'fixed'}}>
-            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto relative" style={{maxHeight: '90vh', overflowY: 'auto'}}>
-                {/* Close button inside the card, top-right, with space above heading */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-2 right-2 text-white hover:text-red-300 transition-colors"
-                    style={{
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        borderRadius: '50%',
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        zIndex: 10
-                    }}
-                >
-                    ✕
-                </button>
+            {/* Close button absolutely positioned in overlay */}
+            <button
+                onClick={onClose}
+                className="absolute top-8 right-8 text-white hover:text-red-300 transition-colors"
+                style={{
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    zIndex: 100
+                }}
+            >
+                ✕
+            </button>
+            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto" style={{maxHeight: '90vh', overflowY: 'auto', paddingTop: '48px'}}>
                 <div className="text-center mb-6">
                     <h2 className="text-xl font-bold text-white drop-shadow-md">
                         User Information

@@ -77,12 +77,11 @@ const AuthPopup = ({ onClose, onRegister }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{overflow: 'hidden', position: 'fixed'}}>
-            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto relative" style={{maxHeight: '90vh', overflowY: 'auto'}}>
-                {/* Close button inside the card, top-right, with space above heading */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{overflow: 'hidden'}}>
+            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto" style={{maxHeight: '90vh', overflowY: 'auto'}}>
                 <button
                     onClick={onClose}
-                    className="absolute top-2 right-2 text-white hover:text-red-300 transition-colors"
+                    className="absolute top-4 right-4 text-white hover:text-red-300 transition-colors"
                     style={{
                         background: 'rgba(0, 0, 0, 0.3)',
                         borderRadius: '50%',
@@ -92,12 +91,12 @@ const AuthPopup = ({ onClose, onRegister }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        zIndex: 10
+                        border: '1px solid rgba(255, 255, 255, 0.2)'
                     }}
                 >
                     ✕
                 </button>
+
                 <div className="text-center mb-6">
                     <h2 className="text-xl font-bold text-white drop-shadow-md">
                         User Information

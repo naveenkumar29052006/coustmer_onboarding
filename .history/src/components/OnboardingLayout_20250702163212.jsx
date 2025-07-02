@@ -82,7 +82,7 @@ const OnboardingLayout = ({ children, stepStatus: propStepStatus }) => {
         activeStepIndex={activeStepIndex}
       />
       {/* Main content */}
-      <div className='flex flex-col items-start justify-center min-h-screen w-full z-10 px-2 md:pl-[100px] md:px-0'
+      <div className='flex flex-col items-start justify-center min-h-screen w-full z-10 px-2 md:pl-[250px] md:px-0'
         style={{
           maxWidth: '100%',
           backgroundImage: "url('/back.png')",

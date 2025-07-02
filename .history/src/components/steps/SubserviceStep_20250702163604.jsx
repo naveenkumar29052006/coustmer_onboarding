@@ -579,15 +579,7 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
         const selectedCount = selectedServices.length;
         const detailsCount = (formState.serviceDetails || []).length;
         if (detailsCount < selectedCount) {
-            // Find which services are missing details
-            const filledServices = (formState.serviceDetails || []).map(d => d.service);
-            const missingServices = selectedServices
-                .map(serviceNum => {
-                    const configService = typeof serviceNum === 'number' ? servicesConfig[serviceNum - 1] : null;
-                    return configService ? configService.label : '';
-                })
-                .filter(label => label && !filledServices.includes(label));
-            toast.error(`Please select details for: ${missingServices.join(', ')}`);
+            toast.error('Please select details for all your chosen services to continue.');
             return;
         }
         // Update the form state with selected subservices

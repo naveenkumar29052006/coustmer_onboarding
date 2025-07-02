@@ -22,7 +22,7 @@ import ShareDetailsPage from './ShareDetailsPage';
 const steps = [
     { title: 'Areas of Responsibility', component: <AreaOfResponsibilityStep />, options: ["Founder", "Finance Leader", "Finance Team Member", "Finance Consultant", "Others"] },
     { title: 'Nature of Business', component: <BusinessCategoryStep />, options: ["Technology", "Infra & Real Estate", "Education", "Life science", "Finance Services", "Hospitality", "Manufacturing", "Retails & Consumers", "Services", "Others"] },
-    { title: 'Business Financial Overview', component: <FinancialOverviewStep />, options: ["Yet to begin", "Under 1 Crore", "1-10 Crore", "10-50 Crore", "50-100 Crore", "Above 100 Crore", "All of the above"] },
+    { title: 'Business Financial Overview', component: <FinancialOverviewStep />, options: ["Yet to begin", "Under 1 Crore", "1-10 Crore", "10-50 Crore", "50-100 Crore", "Above 100 Crore", "Above all of this"] },
     { title: 'Number of Employees', component: <EmployeeCountStep />, options: ["0-10", "11-50", "51-200", "201-1000", "Above 1000"] },
     { title: 'Preferred Services', component: <ServicesStep />, options: ["Zoho", "Finance Operation Automation", "Payroll", "Accounting", "Compliances", "Advisory Services", "Start a Business", "Hire a CFO", "Audit Support", "People Augmentation", "HR Support", "Customer Support"] },
 ];
@@ -72,9 +72,9 @@ const OnboardingContainer = ({ onComplete, onContinueToSubservice }) => {
             if (!formState.businessCategory) missingFields.push('business category');
             if (!formState.valuationRange) missingFields.push('valuation range');
             if (!formState.currency) missingFields.push('currency');
-            // Skip employee count and services check if 'All of the above' is selected
-            if (formState.valuationRange !== "Yet to begin" && formState.valuationRange !== "All of the above" && !formState.employeeCount) missingFields.push('number of employees');
-            if (formState.valuationRange !== "All of the above" && (!formState.selectedServices || formState.selectedServices.length === 0)) missingFields.push('at least one service');
+            // Skip employee count and services check if 'Above all of this' is selected
+            if (formState.valuationRange !== "Yet to begin" && formState.valuationRange !== "Above all of this" && !formState.employeeCount) missingFields.push('number of employees');
+            if (formState.valuationRange !== "Above all of this" && (!formState.selectedServices || formState.selectedServices.length === 0)) missingFields.push('at least one service');
             if (missingFields.length > 0) {
                 toast.error('Please select: ' + missingFields.join(', ') + ' to continue.');
                 return;
@@ -82,7 +82,7 @@ const OnboardingContainer = ({ onComplete, onContinueToSubservice }) => {
         }
         // Step is valid, increment currentStep
         setCurrentStep(currentStep + 1);
-        if (formState.valuationRange === 'All of the above') {
+        if (formState.valuationRange === 'Above all of this') {
             setCurrentViewWithLog('shareDetails');
             return;
         }
@@ -255,8 +255,8 @@ const OnboardingContainer = ({ onComplete, onContinueToSubservice }) => {
                                         if (idx === 3 && formState.valuationRange === "Yet to begin") {
                                             return null;
                                         }
-                                            // Hide Employee Count and Preferred Services if 'All of the above' is selected
-                                            if ((idx === 3 || idx === 4) && formState.valuationRange === "All of the above") {
+                                            // Hide Employee Count and Preferred Services if 'Above all of this' is selected
+                                            if ((idx === 3 || idx === 4) && formState.valuationRange === "Above all of this") {
                                                 return null;
                                             }
 

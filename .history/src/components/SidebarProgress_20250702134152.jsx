@@ -1,7 +1,8 @@
 import React from 'react';
 import { FaInstagram, FaLinkedin, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import OnboardingLayout from './OnboardingLayout';
 
-const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
+const SidebarProgress = ({ steps, stepStatus, activeStepIndex }) => {
   const stepToView = [
     'home',           // Basic Details
     'subservice',     // Additional Services
@@ -9,6 +10,10 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
     'proposal',       // Preview
     'proposal',       // Proposal
   ];
+
+  // Get SVGs with default and white stroke
+  const defaultSVGs = OnboardingLayout?.getStepSVGs ? OnboardingLayout.getStepSVGs() : [];
+  const whiteSVGs = OnboardingLayout?.getStepSVGs ? OnboardingLayout.getStepSVGs('#fff') : [];
 
   return (
     <div
@@ -70,18 +75,9 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
                         </svg>
                       </span>
                     ) : isActive ? (
-                      <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], {
-                          children: React.Children.map(stepSVGs[idx].props.children, child =>
-                            React.isValidElement(child)
-                              ? React.cloneElement(child, { stroke: '#fff' })
-                              : child
-                          ),
-                          stroke: undefined // Remove stroke from parent SVG if present
-                        })}
-                      </span>
+                      whiteSVGs[idx]
                     ) : (
-                      stepSVGs[idx]
+                      defaultSVGs[idx]
                     )}
                   </div>
                   <div className={`text-sm font-semibold transition-colors duration-300 whitespace-nowrap`} style={{ color: (isCompleted || isActive) ? 'var(--Content-Secondary, #333333)' : (idx < activeStepIndex ? '#333333' : '#888'), maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis' }}>

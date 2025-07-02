@@ -78,7 +78,7 @@ const AuthPopup = ({ onClose, onRegister }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{overflow: 'hidden', position: 'fixed'}}>
-            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-6 w-full max-w-md mx-auto relative" style={{maxHeight: '90vh', overflowY: 'auto'}}>
+            <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-lg shadow-lg p-4 w-full max-w-xs mx-auto relative" style={{maxHeight: '90vh', overflowY: 'auto'}}>
                 {/* Close button inside the card, top-right, with space above heading */}
                 <button
                     onClick={onClose}

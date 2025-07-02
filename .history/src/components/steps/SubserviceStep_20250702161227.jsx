@@ -18,7 +18,7 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
     }
     const { user } = useAuth();
     const [selectedSubservices, setSelectedSubservices] = useState([]);
-    const selectionPaths = formState.selectionPaths || {};
+    const [selectionPaths, setSelectionPaths] = useState({});
     const contentRefs = useRef([]);
     const [openServiceNum, setOpenServiceNum] = useState(null);
     const [startBusinessDone, setStartBusinessDone] = useState({});
@@ -62,41 +62,6 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
                 return;
             }
             const path = selectionPaths[serviceNum] || [];
-            // Multi-select for Finance Operation Automation
-            if (configService.label === 'Finance Operation Automation') {
-                const selectedArr = path[0] || [];
-                // DPA (index 0)
-                if (Array.isArray(selectedArr) && selectedArr.includes(0)) {
-                    serviceDetails.push({
-                        service: configService.label,
-                        option: configService.subcategories[0].label,
-                        sub_option: null
-                    });
-                }
-                // CFO Stack – ITeC App (index 1)
-                if (Array.isArray(selectedArr) && selectedArr.includes(1)) {
-                    const cfoSub = configService.subcategories[1];
-                    const cfoSelectedArr = path[1] || [];
-                    if (Array.isArray(cfoSelectedArr) && cfoSelectedArr.length > 0) {
-                        cfoSelectedArr.forEach(subIdx => {
-                            serviceDetails.push({
-                                service: configService.label,
-                                option: cfoSub.label,
-                                sub_option: cfoSub.subcategories[subIdx]?.label || null
-                            });
-                        });
-                    } else {
-                        // If CFO Stack selected but no sub-option, still add entry
-                        serviceDetails.push({
-                            service: configService.label,
-                            option: cfoSub.label,
-                            sub_option: null
-                        });
-                    }
-                }
-                return;
-            }
-            // Default single-select logic
             let current = configService.subcategories;
             let isLeaf = false;
             let option = null;
@@ -149,37 +114,32 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
 
     // Update handleSelect to support multi-select for Finance Operation Automation and CFO Stack – ITeC App
     const handleSelect = (serviceNum, level, idx) => {
-        const prev = selectionPaths;
-        const prevPath = prev[serviceNum] || [];
-        const configService = typeof serviceNum === 'number' ? servicesConfig[serviceNum - 1] : null;
-        if (!configService) return;
-        let newSelectionPaths = { ...prev };
-        // Multi-select for Finance Operation Automation (level 0)
-        if (level === 0 && isMultiSelect(configService.label)) {
-            let selected = prevPath[0] || [];
-            if (!Array.isArray(selected)) selected = selected !== undefined ? [selected] : [];
-            selected = selected.includes(idx)
-                ? selected.filter(i => i !== idx)
-                : [...selected, idx];
-            newSelectionPaths[serviceNum] = [selected];
-            updateField('selectionPaths', newSelectionPaths);
-            return;
-        }
-        // Multi-select for CFO Stack – ITeC App (level 1)
-        if (level === 1 && isMultiSelect(configService.label, configService.subcategories[prevPath[0]]?.label)) {
-            let selected = prevPath[1] || [];
-            if (!Array.isArray(selected)) selected = selected !== undefined ? [selected] : [];
-            selected = selected.includes(idx)
-                ? selected.filter(i => i !== idx)
-                : [...selected, idx];
-            newSelectionPaths[serviceNum] = [prevPath[0], selected];
-            updateField('selectionPaths', newSelectionPaths);
-            return;
-        }
-        // Default single-select
-        const newPath = [...prevPath.slice(0, level), idx];
-        newSelectionPaths[serviceNum] = newPath;
-        updateField('selectionPaths', newSelectionPaths);
+        setSelectionPaths(prev => {
+            const prevPath = prev[serviceNum] || [];
+            const configService = typeof serviceNum === 'number' ? servicesConfig[serviceNum - 1] : null;
+            if (!configService) return prev;
+            // Multi-select for Finance Operation Automation (level 0)
+            if (level === 0 && isMultiSelect(configService.label)) {
+                let selected = prevPath[0] || [];
+                if (!Array.isArray(selected)) selected = selected !== undefined ? [selected] : [];
+                selected = selected.includes(idx)
+                    ? selected.filter(i => i !== idx)
+                    : [...selected, idx];
+                return { ...prev, [serviceNum]: [selected] };
+            }
+            // Multi-select for CFO Stack – ITeC App (level 1)
+            if (level === 1 && isMultiSelect(configService.label, configService.subcategories[prevPath[0]]?.label)) {
+                let selected = prevPath[1] || [];
+                if (!Array.isArray(selected)) selected = selected !== undefined ? [selected] : [];
+                selected = selected.includes(idx)
+                    ? selected.filter(i => i !== idx)
+                    : [...selected, idx];
+                return { ...prev, [serviceNum]: [prevPath[0], selected] };
+            }
+            // Default single-select
+            const newPath = [...prevPath.slice(0, level), idx];
+            return { ...prev, [serviceNum]: newPath };
+        });
     };
 
     // Accordion UI for each selected service
@@ -200,12 +160,6 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
             showTick = !!isStartBusinessDone;
         } else if (!hasOptions) {
             showTick = true;
-        } else if (configService.label === 'Finance Operation Automation') {
-            // Tick if any option or sub-option is selected
-            const selectedArr = (selectionPaths[serviceNum] || [])[0] || [];
-            const cfoIdx = configService.subcategories.findIndex(sub => sub.label === 'CFO Stack – ITeC App');
-            const cfoSelectedArr = (selectionPaths[serviceNum] || [])[1] || [];
-            showTick = (Array.isArray(selectedArr) && selectedArr.length > 0) || (Array.isArray(cfoSelectedArr) && cfoSelectedArr.length > 0);
         } else {
             let current = configService.subcategories;
             let complete = true;
@@ -579,15 +533,7 @@ const SubserviceStep = ({ onBack, onComplete, setStepStatus }) => {
         const selectedCount = selectedServices.length;
         const detailsCount = (formState.serviceDetails || []).length;
         if (detailsCount < selectedCount) {
-            // Find which services are missing details
-            const filledServices = (formState.serviceDetails || []).map(d => d.service);
-            const missingServices = selectedServices
-                .map(serviceNum => {
-                    const configService = typeof serviceNum === 'number' ? servicesConfig[serviceNum - 1] : null;
-                    return configService ? configService.label : '';
-                })
-                .filter(label => label && !filledServices.includes(label));
-            toast.error(`Please select details for: ${missingServices.join(', ')}`);
+            toast.error('Please select details for all your chosen services to continue.');
             return;
         }
         // Update the form state with selected subservices

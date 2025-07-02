@@ -1,7 +1,8 @@
 import React from 'react';
 import { FaInstagram, FaLinkedin, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 
-const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
+const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex, setCurrentView }) => {
+  // Map step index to view name
   const stepToView = [
     'home',           // Basic Details
     'subservice',     // Additional Services
@@ -9,7 +10,6 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
     'proposal',       // Preview
     'proposal',       // Proposal
   ];
-
   return (
     <div
       className="hidden md:flex flex-col justify-between items-center h-screen fixed left-0 top-0 bottom-0 bg-transparent p-0 z-20"
@@ -37,11 +37,8 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
             const isCompleted = stepStatus[idx];
             return (
               <React.Fragment key={title}>
-                <div className="flex items-center gap-3 mb-2 transition-all duration-300 hover:translate-x-1"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent('sidebar-step-click', { detail: { view: stepToView[idx] } }));
-                  }}
-                  style={{ cursor: 'pointer' }}
+                <div className="flex items-center gap-3 mb-2 transition-all duration-300 hover:translate-x-1 cursor-pointer"
+                  onClick={() => setCurrentView && setCurrentView(stepToView[idx])}
                 >
                   <div
                     className={`rounded-full flex items-center justify-center relative transition-all duration-500 p-0`}
@@ -71,14 +68,7 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
                       </span>
                     ) : isActive ? (
                       <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], {
-                          children: React.Children.map(stepSVGs[idx].props.children, child =>
-                            React.isValidElement(child)
-                              ? React.cloneElement(child, { stroke: '#fff' })
-                              : child
-                          ),
-                          stroke: undefined // Remove stroke from parent SVG if present
-                        })}
+                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], { stroke: '#fff' })}
                       </span>
                     ) : (
                       stepSVGs[idx]

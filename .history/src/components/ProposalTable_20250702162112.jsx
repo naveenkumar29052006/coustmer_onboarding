@@ -16,13 +16,13 @@ const ProposalTable = ({ serviceDetails = [] }) => {
   const total = detailsWithPrice.reduce((sum, d) => sum + (d._randomPrice || 0), 0);
 
   return (
-    <table className="proposal-table w-full border border-gray-800 text-sm table-auto">
+    <table className="proposal-table mx-auto w-full max-w-5xl border border-gray-800 text-sm table-auto" style={{ minWidth: '900px' }}>
       <thead>
         <tr className="bg-orange-500 text-white">
           <th className="px-4 py-2 border border-gray-800 w-16">S.No</th>
-          <th className="px-4 py-2 border border-gray-800">Service</th>
-          <th className="px-4 py-2 border border-gray-800">Option</th>
-          <th className="px-4 py-2 border border-gray-800">Sub Option</th>
+          <th className="px-4 py-2 border border-gray-800 min-w-[180px]">Service</th>
+          <th className="px-4 py-2 border border-gray-800 min-w-[180px]">Option</th>
+          <th className="px-4 py-2 border border-gray-800 min-w-[200px]">Sub Option</th>
         </tr>
       </thead>
       <tbody>

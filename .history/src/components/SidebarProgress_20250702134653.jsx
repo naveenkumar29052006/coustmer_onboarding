@@ -70,15 +70,23 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
                         </svg>
                       </span>
                     ) : isActive ? (
-                      <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], {
-                          children: React.Children.map(stepSVGs[idx].props.children, child =>
-                            React.isValidElement(child)
-                              ? React.cloneElement(child, { stroke: '#fff' })
-                              : child
-                          ),
-                          stroke: undefined // Remove stroke from parent SVG if present
-                        })}
+                      <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                        {/* White border overlay for SVG */}
+                        <span style={{
+                          position: 'absolute',
+                          top: 2,
+                          left: 2,
+                          width: 24,
+                          height: 24,
+                          borderRadius: '50%',
+                          border: '2px solid #fff',
+                          pointerEvents: 'none',
+                          boxSizing: 'border-box',
+                          zIndex: 1
+                        }} />
+                        <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], { stroke: '#fff' })}
+                        </span>
                       </span>
                     ) : (
                       stepSVGs[idx]

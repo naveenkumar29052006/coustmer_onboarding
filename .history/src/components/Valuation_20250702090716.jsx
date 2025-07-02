@@ -7,7 +7,7 @@ const valuationRanges = [
   "Under 1-10 Crore",
   "Under 10-50 Crore",
   "Under 50-100 Crore",
-  "All of the above",
+  "Above all of this",
 ];
 
 const Valuation = ({ formValid }) => {

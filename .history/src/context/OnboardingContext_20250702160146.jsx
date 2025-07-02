@@ -19,8 +19,7 @@ const initialState = {
     // Store actual service details with names
     serviceDetails: [],
     proposalSent: false, // NEW: track if proposal was sent
-    currency: "INR", // Default currency is INR
-    selectionPaths: {} // Persist subservice selections
+    currency: "INR" // Default currency is INR
 };
 
 const OnboardingContext = createContext(null);

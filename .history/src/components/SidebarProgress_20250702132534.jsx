@@ -70,15 +70,8 @@ const SidebarProgress = ({ steps, stepSVGs, stepStatus, activeStepIndex }) => {
                         </svg>
                       </span>
                     ) : isActive ? (
-                      <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], {
-                          children: React.Children.map(stepSVGs[idx].props.children, child =>
-                            React.isValidElement(child)
-                              ? React.cloneElement(child, { stroke: '#fff' })
-                              : child
-                          ),
-                          stroke: undefined // Remove stroke from parent SVG if present
-                        })}
+                      <span style={{ width: '28px', height: '28px', background: 'var(--Background-Notice, #FF8000)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff', boxSizing: 'border-box' }}>
+                        {stepSVGs[idx] && React.cloneElement(stepSVGs[idx], { stroke: '#fff' })}
                       </span>
                     ) : (
                       stepSVGs[idx]
