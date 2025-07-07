@@ -98,8 +98,6 @@ const UserListPage = () => {
   const [emailFilter, setEmailFilter] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
-  const [page, setPage] = useState(1);
-  const pageSize = 5;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -163,26 +161,41 @@ const UserListPage = () => {
     return sortDirection === 'asc' ? ' ▲' : ' ▼';
   };
 
-  // Sort users by created_at descending
   const sortedUsers = [...filteredUsers].sort((a, b) => {
-    const aDate = a.created_at ? new Date(a.created_at).getTime() : 0;
-    const bDate = b.created_at ? new Date(b.created_at).getTime() : 0;
-    return bDate - aDate;
+    if (!sortColumn) return 0;
+    let aValue = a[sortColumn];
+    let bValue = b[sortColumn];
+    // Special cases for columns not directly in user object
+    if (sortColumn === 'services') {
+      aValue = a.selected_services ? a.selected_services.join(', ') : '';
+      bValue = b.selected_services ? b.selected_services.join(', ') : '';
+    } else if (sortColumn === 'additional_services') {
+      aValue = formatServiceDetails(a);
+      bValue = formatServiceDetails(b);
+    } else if (sortColumn === 'whatsapp_status' || sortColumn === 'email_status') {
+      aValue = a[sortColumn] || 0;
+      bValue = b[sortColumn] || 0;
+    } else if (sortColumn === 'created_at') {
+      aValue = a.created_at ? new Date(a.created_at).getTime() : 0;
+      bValue = b.created_at ? new Date(b.created_at).getTime() : 0;
+    } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+    }
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
   });
 
-  // Pagination logic
-  const totalPages = Math.ceil(sortedUsers.length / pageSize);
-  const paginatedUsers = sortedUsers.slice((page - 1) * pageSize, page * pageSize);
-
   return (
-    <div className="min-h-screen p-8 bg-gray-50 w-full font-poppins">
-      <div className="w-full">
-        <h1 className="text-3xl font-bold mb-8 text-[#222] font-poppins">User List</h1>
+    <div className="min-h-screen p-8 bg-gray-50">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">User List</h1>
 
-        <div className="bg-white rounded-2xl shadow-lg overflow-x-auto border border-gray-200 w-full">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 p-6 border-b border-gray-100">
+        <div className="bg-transparent rounded-lg shadow-md overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 p-6 border-b border-gray-200">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
-              <h1 className="text-3xl font-bold text-[#534DAF] font-poppins">Registered Users</h1>
+              <h1 className="text-3xl font-bold text-[#534DAF]">Registered Users</h1>
             </div>
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               <div className="flex items-center justify-center h-10 min-w-[120px] px-3 bg-[#FF8000]/10 text-[#FF8000] rounded-lg font-bold text-base shadow-sm border border-[#FF8000]/30">
@@ -193,12 +206,12 @@ const UserListPage = () => {
                 placeholder="Search by name, email, or company..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF8000] focus:outline-none shadow-sm font-poppins"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF8000] focus:outline-none shadow-sm"
               />
               <select
                 value={serviceFilter}
                 onChange={(e) => setServiceFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm font-poppins"
+                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm"
               >
                 <option value="">All Services</option>
                 {SERVICE_OPTIONS.map((s) => (
@@ -210,7 +223,7 @@ const UserListPage = () => {
               <select
                 value={whatsappFilter}
                 onChange={(e) => setWhatsappFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm font-poppins"
+                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm"
               >
                 <option value="">WhatsApp: All</option>
                 <option value="1">Sent</option>
@@ -219,7 +232,7 @@ const UserListPage = () => {
               <select
                 value={emailFilter}
                 onChange={(e) => setEmailFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm font-poppins"
+                className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm"
               >
                 <option value="">Email: All</option>
                 <option value="1">Sent</option>
@@ -234,71 +247,13 @@ const UserListPage = () => {
           ) : filteredUsers.length === 0 ? (
             <div className="text-gray-500">No users found.</div>
           ) : (
-            <div className="rounded-lg w-full">
-              <table className="w-full bg-white rounded-2xl overflow-hidden font-poppins text-sm">
-                <thead>
-                  <tr className="bg-[#FF8000] text-white text-base">
-                    <th className="px-4 py-3 font-semibold">Name</th>
-                    <th className="px-4 py-3 font-semibold">Email</th>
-                    <th className="px-4 py-3 font-semibold">Company</th>
-                    <th className="px-4 py-3 font-semibold">Phone</th>
-                    <th className="px-4 py-3 font-semibold">WhatsApp Status</th>
-                    <th className="px-4 py-3 font-semibold">Email Status</th>
-                    <th className="px-4 py-3 font-semibold">Created At</th>
-                    <th className="px-4 py-3 font-semibold">Updated At</th>
-                    <th className="px-4 py-3 font-semibold">Service Details</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedUsers.map((user, idx) => (
-                    <tr key={user._id || idx} className="border-b last:border-b-0 hover:bg-[#FFF3E6] transition">
-                      <td className="px-4 py-2 text-[#222]">{user.name}</td>
-                      <td className="px-4 py-2 text-[#222]">{user.email}</td>
-                      <td className="px-4 py-2 text-[#222]">{user.company || user.company_name || '-'}</td>
-                      <td className="px-4 py-2 text-[#222]">{user.phone || '-'}</td>
-                      <td className="px-4 py-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins flex items-center justify-center ${user.whatsapp_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
-                          {user.whatsapp_status === 1 ? (
-                            <span className="text-lg" role="img" aria-label="sent">✔</span>
-                          ) : (
-                            <span className="text-lg" role="img" aria-label="not sent">✖</span>
-                          )}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins flex items-center justify-center ${user.email_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
-                          {user.email_status === 1 ? (
-                            <span className="text-lg" role="img" aria-label="sent">✔</span>
-                          ) : (
-                            <span className="text-lg" role="img" aria-label="not sent">✖</span>
-                          )}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 text-[#222]">{user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>
-                      <td className="px-4 py-2 text-[#222]">{user.updated_at ? new Date(user.updated_at).toLocaleString() : '-'}</td>
-                      <td className="px-4 py-2 text-[#222]">{formatServiceDetails(user)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {/* Pagination controls */}
-              <div className="flex justify-center items-center gap-2 mt-4">
-                <button
-                  className="px-4 py-2 rounded-full bg-[#FF8000] text-white font-semibold shadow hover:bg-[#ff9900] transition disabled:opacity-50 font-poppins"
-                  onClick={() => setPage(page - 1)}
-                  disabled={page === 1}
-                >
-                  Previous
-                </button>
-                <span className="font-medium text-[#222] font-poppins">Page {page} of {totalPages}</span>
-                <button
-                  className="px-4 py-2 rounded-full bg-[#FF8000] text-white font-semibold shadow hover:bg-[#ff9900] transition disabled:opacity-50 font-poppins"
-                  onClick={() => setPage(page + 1)}
-                  disabled={page === totalPages}
-                >
-                  Next
-                </button>
-              </div>
+            <div className="overflow-x-auto rounded-lg">
+              <ProposalTable serviceDetails={sortedUsers.map(user => ({
+                service: user.name,
+                option: user.email,
+                sub_option: user.company_name,
+                _randomPrice: 0 // or any logic you want for price
+              }))} />
             </div>
           )}
         </div>

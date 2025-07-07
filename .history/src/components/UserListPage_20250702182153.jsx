@@ -257,21 +257,13 @@ const UserListPage = () => {
                       <td className="px-4 py-2 text-[#222]">{user.company || user.company_name || '-'}</td>
                       <td className="px-4 py-2 text-[#222]">{user.phone || '-'}</td>
                       <td className="px-4 py-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins flex items-center justify-center ${user.whatsapp_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
-                          {user.whatsapp_status === 1 ? (
-                            <span className="text-lg" role="img" aria-label="sent">✔</span>
-                          ) : (
-                            <span className="text-lg" role="img" aria-label="not sent">✖</span>
-                          )}
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins ${user.whatsapp_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
+                          {user.whatsapp_status === 1 ? 'Sent' : 'Not Sent'}
                         </span>
                       </td>
                       <td className="px-4 py-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins flex items-center justify-center ${user.email_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
-                          {user.email_status === 1 ? (
-                            <span className="text-lg" role="img" aria-label="sent">✔</span>
-                          ) : (
-                            <span className="text-lg" role="img" aria-label="not sent">✖</span>
-                          )}
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold font-poppins ${user.email_status === 1 ? 'bg-[#009933]/10 text-[#009933] border border-[#009933]/30' : 'bg-[#FF8000]/10 text-[#FF8000] border border-[#FF8000]/30'}`}>
+                          {user.email_status === 1 ? 'Sent' : 'Not Sent'}
                         </span>
                       </td>
                       <td className="px-4 py-2 text-[#222]">{user.created_at ? new Date(user.created_at).toLocaleString() : '-'}</td>

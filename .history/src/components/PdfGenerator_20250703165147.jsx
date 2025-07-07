@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   tableCellHeaderSno: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderRight: '1px solid #fff',
     borderBottom: '1px solid #fff',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   tableCellHeaderService: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderRight: '1px solid #fff',
     borderBottom: '1px solid #fff',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   tableCellHeaderOption: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderRight: '1px solid #fff',
     borderBottom: '1px solid #fff',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   tableCellHeaderSubOption: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderRight: '1px solid #fff',
     borderBottom: '1px solid #fff',
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   tableCellHeaderPrice: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderBottom: '1px solid #fff',
     minWidth: 80,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   tableCellSno: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderRight: '1px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
   },
   tableCellService: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderRight: '1px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
   },
   tableCellOption: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderRight: '1px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
   },
   tableCellSubOption: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderRight: '1px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f7f7',
   },
   tableCellPrice: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderBottom: '1px solid #e0e0e0',
     minWidth: 80,

@@ -49,103 +49,38 @@ const styles = StyleSheet.create({
   tableHeader: {
     backgroundColor: '#FF8000',
   },
-  tableCellHeaderSno: {
+  tableCellHeader: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderRight: '1px solid #fff',
     borderBottom: '1px solid #fff',
-    width: 40,
-    textAlign: 'left',
-  },
-  tableCellHeaderService: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 12,
-    padding: 8,
-    borderRight: '1px solid #fff',
-    borderBottom: '1px solid #fff',
-    minWidth: 120,
-    flex: 2,
-    textAlign: 'left',
-  },
-  tableCellHeaderOption: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 12,
-    padding: 8,
-    borderRight: '1px solid #fff',
-    borderBottom: '1px solid #fff',
-    minWidth: 100,
-    flex: 1.2,
-    textAlign: 'left',
-  },
-  tableCellHeaderSubOption: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 12,
-    padding: 8,
-    borderRight: '1px solid #fff',
-    borderBottom: '1px solid #fff',
-    minWidth: 100,
-    flex: 1.2,
+    flex: 1,
     textAlign: 'left',
   },
   tableCellHeaderPrice: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 16,
     padding: 8,
     borderBottom: '1px solid #fff',
-    minWidth: 80,
     flex: 1,
     textAlign: 'right',
   },
-  tableCellSno: {
-    fontSize: 11,
+  tableCell: {
+    fontSize: 14,
     padding: 8,
     borderRight: '1px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
-    width: 40,
-    textAlign: 'left',
-    backgroundColor: '#f7f7f7',
-  },
-  tableCellService: {
-    fontSize: 11,
-    padding: 8,
-    borderRight: '1px solid #e0e0e0',
-    borderBottom: '1px solid #e0e0e0',
-    minWidth: 120,
-    flex: 2,
-    textAlign: 'left',
-    backgroundColor: '#f7f7f7',
-  },
-  tableCellOption: {
-    fontSize: 11,
-    padding: 8,
-    borderRight: '1px solid #e0e0e0',
-    borderBottom: '1px solid #e0e0e0',
-    minWidth: 100,
-    flex: 1.2,
-    textAlign: 'left',
-    backgroundColor: '#f7f7f7',
-  },
-  tableCellSubOption: {
-    fontSize: 11,
-    padding: 8,
-    borderRight: '1px solid #e0e0e0',
-    borderBottom: '1px solid #e0e0e0',
-    minWidth: 100,
-    flex: 1.2,
+    flex: 1,
     textAlign: 'left',
     backgroundColor: '#f7f7f7',
   },
   tableCellPrice: {
-    fontSize: 11,
+    fontSize: 14,
     padding: 8,
     borderBottom: '1px solid #e0e0e0',
-    minWidth: 80,
     flex: 1,
     textAlign: 'right',
     backgroundColor: '#f7f7f7',
@@ -175,41 +110,24 @@ const styles = StyleSheet.create({
 });
 
 const ServicesTable = memo(({ serviceDetails }) => {
-  const total = useMemo(() =>
-    (serviceDetails || []).reduce((sum, d) => sum + (d._randomPrice || d.price || 0), 0),
-    [serviceDetails]
-  );
-
   return (
     <View style={styles.table}>
       {/* Header */}
       <View style={[styles.tableRow, styles.tableHeader]}>
-        <Text style={styles.tableCellHeaderSno}>S.No</Text>
-        <Text style={styles.tableCellHeaderService}>Service</Text>
-        <Text style={styles.tableCellHeaderOption}>Option</Text>
-        <Text style={styles.tableCellHeaderSubOption}>Sub Option</Text>
-        <Text style={styles.tableCellHeaderPrice}>Price</Text>
+        <Text style={styles.tableCellHeader}>S.No</Text>
+        <Text style={styles.tableCellHeader}>Service</Text>
+        <Text style={styles.tableCellHeader}>Option</Text>
+        <Text style={styles.tableCellHeader}>Sub Option</Text>
       </View>
       {/* Rows */}
       {(serviceDetails || []).map((detail, idx) => (
         <View style={styles.tableRow} key={idx}>
-          <Text style={styles.tableCellSno}>{idx + 1}</Text>
-          <Text style={styles.tableCellService}>{detail.service}</Text>
-          <Text style={styles.tableCellOption}>{detail.option || '-'}</Text>
-          <Text style={styles.tableCellSubOption}>{detail.sub_option || '-'}</Text>
-          <Text style={styles.tableCellPrice}>
-            {(detail._randomPrice || detail.price || 0).toLocaleString()} <Text style={styles.perMonth}>Per month</Text>
-          </Text>
+          <Text style={styles.tableCell}>{idx + 1}</Text>
+          <Text style={styles.tableCell}>{detail.service}</Text>
+          <Text style={styles.tableCell}>{detail.option || '-'}</Text>
+          <Text style={styles.tableCell}>{detail.sub_option || '-'}</Text>
         </View>
       ))}
-      {/* Total Row */}
-      <View style={styles.tableRow}>
-        <Text style={styles.tableCellSno}></Text>
-        <Text style={styles.tableCellService}></Text>
-        <Text style={styles.tableCellOption}></Text>
-        <Text style={styles.tableCellSubOption}>Total</Text>
-        <Text style={styles.tableCellPrice}>{total.toLocaleString()}</Text>
-      </View>
     </View>
   );
 });
